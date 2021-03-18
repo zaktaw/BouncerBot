@@ -1,0 +1,28 @@
+{
+  "name": "bouncerbot",
+  "version": "1.0.0",
+  "description": "Discord bot for easier managing reporting, timeouts, kicking and banning of members.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zaktaw/BouncerBot.git"
+  },
+  "keywords": [
+    "Discord",
+    "Bot",
+    "Node.js",
+    "discord.js"
+  ],
+  "author": "Zakaria Karlsen Tawfiq",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zaktaw/BouncerBot/issues"
+  },
+  "homepage": "https://github.com/zaktaw/BouncerBot#readme",
+  "dependencies": {
+    "discord.js": "^12.5.1"
+  }
+}
