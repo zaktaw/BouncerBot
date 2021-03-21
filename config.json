@@ -1,4 +1,7 @@
 {
     "roleID": "",
-    "prefix": "$"
+    "prefix": "$",
+    "moderatorChannelID": "823181311467716638",
+    "moderatorRoleID": "823191704190451752",
+    "guildID": "798244656974004224"
 }
