@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const bot = new Discord.Client();
 const config = require('./config.json')
 const user = require('./user.js')
+const moderator = require('./moderator.js')
 
 bot.on('ready', () => {
     console.log("Bot is online!");
@@ -39,7 +40,11 @@ bot.on('message', (msg) => {
             case 'test' :
                 msg.channel.send("BouncerBot is working")
                 break;
-    
+
+            case 'warn' :
+                moderator.warnUser(bot, msg);
+                break;
+
             default :
                 msg.channel.send(`"${args[0]}" is an invalid command.`)
                     .then(message => message.delete( {timeout: 5000} ))
