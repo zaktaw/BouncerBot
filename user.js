@@ -9,7 +9,7 @@ async function reportUser(msg, bot) {
     let username = msg.author.username;
     let displayName = guildMember.displayName;
     displayName = displayName != username ? displayName : null // set displayName to null if it is identical to the username
-
+    
     moderatorChannel.send(`<@&${config.moderatorRoleID}> Report recieved from ${username} ${displayName ? ' (' + displayName + ')' : ''}: ${messageContent}`) // only show displayname if it is not identical to username
         .then(msg.reply("The report was successfully sent. The moderators will handle the issue."))
         .catch(err => console.error(err));
