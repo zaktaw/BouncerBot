@@ -18,8 +18,6 @@ async function timeoutUser(bot, msg) {
     let minutes = msg.content.split(" ")[2] * 1000 * 60; // how many minutes (converted to milliseconds) the timeout will last
     let reason = msg.content.split(" ")[3]; // reason for why the user recieved the timeout
 
-    minutes = 15 * 1000
-
     let guild = await bot.guilds.cache.filter(guild => guild.id == config.guildID).get(config.guildID);
     guild.members.fetch(userID)
         .then(member => {
