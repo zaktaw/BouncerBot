@@ -45,6 +45,10 @@ bot.on('message', (msg) => {
                 moderator.warnUser(bot, msg);
                 break;
 
+            case 'timeout' :
+                moderator.timeoutUser(bot, msg);
+                break;
+
             default :
                 msg.channel.send(`"${args[0]}" is an invalid command.`)
                     .then(message => message.delete( {timeout: 5000} ))
