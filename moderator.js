@@ -1,4 +1,4 @@
-const config = require('./config.json')
+const config = require('./testConfig.json')
 
 async function warnUser(bot, msg) {
 

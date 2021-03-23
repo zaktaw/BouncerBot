@@ -1,4 +1,4 @@
-const config = require('./config.json')
+const config = require('./testConfig.json')
 
 async function reportUser(msg, bot) {
     messageContent = msg.content.substring('report '.length); // remove prefix and command from message content
