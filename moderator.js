@@ -3,12 +3,13 @@ const config = require('./config.json')
 async function warnUser(bot, msg) {
 
     let userID = msg.content.split(" ")[1];
-    let warning = msg.content.split(" ")[2]
+    let warningMessage = msg.content.substring(config.prefix.length + "warn ".length + userID.length); // remove prefix, command and userID from message
 
     // send warning to user
     let guild = await bot.guilds.cache.filter(guild => guild.id == config.guildID).get(config.guildID);
     guild.members.fetch(userID)
-        .then(member => member.user.send(warning))
+        .then(member => member.user.send(warningMessage))
+        .catch(err => msg.channel.send("Could not find any user with ID " + userID))
 }
 
 // a timeout will set assign a timeout-role to the user, send the user a message that contains the reason for the timeout

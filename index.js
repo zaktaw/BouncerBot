@@ -42,6 +42,7 @@ bot.on('message', (msg) => {
                 break;
 
             case 'warn' :
+                if (!args[2]) return msg.channel.send("Warn command needs a user ID and a warning message as arguments, i.e $warn 696215209303474187 If you continue spamming you will get a timeout")
                 moderator.warnUser(bot, msg);
                 break;
 
