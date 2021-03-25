@@ -32,12 +32,15 @@ bot.on('message', (msg) => {
         // Prevent spam from bot
         if (!msg.content.startsWith(config.prefix)) return; // only reply to messages starting with bot' prefix
         if (!msg.guild) return; // bot will only reply if message is sent in the guild (server)
+        if (!msg.member.roles.cache.has(config.moderatorRoleID)) return msg.channel.send("You have to be a moderator to use this command")
+        if (msg.channel.parentID != config.moderatorCategoryID) return msg.channel.send("This command can only be used in a moderator channel");
 
         args = msg.content.substring(config.prefix.length).split(" ") // extract arguments from message
 
         switch (args[0].toLowerCase()) {
             
             case 'test' :
+                
                 msg.channel.send("BouncerBot is working")
                 break;
 

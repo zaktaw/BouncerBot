@@ -1,7 +1,8 @@
 {
     "prefix": "$",
-    "moderatorChannelID": "823181311467716638",
+    "moderatorCategoryID": "823181285899108364",
     "moderatorRoleID": "823191704190451752",
+    "inboxChannelID": "823181311467716638",
     "guildID": "798244656974004224",
     "timeoutRoleID": "823956725115256903"
 }
