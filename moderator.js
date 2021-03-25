@@ -23,11 +23,12 @@ async function timeoutUser(bot, msg) {
     guild.members.fetch(userID)
         .then(member => {
 
-            member.user.send(message)
+            member.user.send(`You have been set on a timeout for ${time} minute${ time > 1 ? 's' : ''}: ${message}`)
             member.voice.kick(); // remove user from the voice channel the user is connected to
             member.roles.add(config.timeoutRoleID)
             setTimeout(() => {
                 member.roles.remove(config.timeoutRoleID)
+                member.user.send("You are no longer on a timeout")
             }, time * 60 * 1000) // convert time from minutes to milliseconds
         })
         .catch(err => msg.channel.send("Could not find any user with ID " + userID));
