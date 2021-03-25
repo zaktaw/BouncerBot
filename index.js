@@ -17,6 +17,10 @@ bot.on('message', (msg) => {
     
     // recieve messages from users
     if (msg.channel.type == "dm") {
+
+        // get blacklistedUsers array from json file
+        // if msg.author.id is in array: return (do not respond to blacklisted users)
+
         if (msg.content.toLowerCase().startsWith("report")) {
            user.reportUser(msg, bot)
         }
@@ -55,6 +59,10 @@ bot.on('message', (msg) => {
                 if (args[2] < 1 || args[2] > 60) return msg.channel.send("Time in minutes needs to be a number between 1 and 60");
                 moderator.timeoutUser(bot, msg);
                 break;
+
+            case 'blacklist' :
+                if (!args[1]) return msg.channel.send("Blacklist command needs a user ID as argument, $blacklist <user ID>, i.e $blacklist 696215209303474187");
+                moderator.blacklistUser(msg)
 
             default :
                 msg.channel.send(`"${args[0]}" is an invalid command.`)

@@ -34,7 +34,17 @@ async function timeoutUser(bot, msg) {
         .catch(err => msg.channel.send("Could not find any user with ID " + userID));
 }
 
+function blacklistUser(msg) {
+    let userID = msg.content.split(" ")[1]
+    // get blacklistedUsers array from json file
+    // check if userID is in array
+        // send error message: user already blacklisted
+    // else: add user to array
+    // update json file 
+}
+
 module.exports = {
     warnUser,
-    timeoutUser
+    timeoutUser,
+    blacklistUser
 }
