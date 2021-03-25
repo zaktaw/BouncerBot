@@ -42,11 +42,14 @@ bot.on('message', (msg) => {
                 break;
 
             case 'warn' :
-                if (!args[2]) return msg.channel.send("Warn command needs a user ID and a warning message as arguments, i.e $warn 696215209303474187 If you continue spamming you will get a timeout")
+                if (!args[2]) return msg.channel.send("Warn command needs a user ID and a message as arguments, $warn <user ID> <message>, i.e $warn 696215209303474187 If you continue spamming you will get a timeout")
                 moderator.warnUser(bot, msg);
                 break;
 
             case 'timeout' :
+                if (!args[3]) return msg.channel.send("Timeout command needs a user ID, time in minutes, and a message as arguments, $timeout <user ID> <time in minutes> <message>, i.e $timeout 696215209303474187 15 You have been timeouted for 15 minutes due to spamming");
+                if (!Number.isFinite(Number(args[2]))) return msg.channel.send("Time in minutes needs to be a number between 1 and 60");
+                if (args[2] < 1 || args[2] > 60) return msg.channel.send("Time in minutes needs to be a number between 1 and 60");
                 moderator.timeoutUser(bot, msg);
                 break;
 

@@ -3,12 +3,12 @@ const config = require('./config.json')
 async function warnUser(bot, msg) {
 
     let userID = msg.content.split(" ")[1];
-    let warningMessage = msg.content.substring(config.prefix.length + "warn ".length + userID.length); // remove prefix, command and userID from message
+    let message = msg.content.substring(config.prefix.length + "warn ".length + userID.length); // remove prefix, command and userID from message
 
     // send warning to user
     let guild = await bot.guilds.cache.filter(guild => guild.id == config.guildID).get(config.guildID);
     guild.members.fetch(userID)
-        .then(member => member.user.send(warningMessage))
+        .then(member => member.user.send(message))
         .catch(err => msg.channel.send("Could not find any user with ID " + userID))
 }
 
@@ -16,20 +16,21 @@ async function warnUser(bot, msg) {
 // the timeout-role will be unassigned after a given time
 async function timeoutUser(bot, msg) {
     let userID = msg.content.split(" ")[1];
-    let minutes = msg.content.split(" ")[2] * 1000 * 60; // how many minutes (converted to milliseconds) the timeout will last
-    let reason = msg.content.split(" ")[3]; // reason for why the user recieved the timeout
+    let time = msg.content.split(" ")[2]; // how much time in minutes (converted to milliseconds) the timeout will last
+    let message = msg.content.substring(config.prefix.length + "timeout ".length + userID.length + 1 + time.length) // reason for why the user recieved the timeout
 
     let guild = await bot.guilds.cache.filter(guild => guild.id == config.guildID).get(config.guildID);
     guild.members.fetch(userID)
         .then(member => {
 
-            member.user.send(reason)
+            member.user.send(message)
             member.voice.kick(); // remove user from the voice channel the user is connected to
             member.roles.add(config.timeoutRoleID)
             setTimeout(() => {
                 member.roles.remove(config.timeoutRoleID)
-            }, minutes)
-        });
+            }, time * 60 * 1000) // convert time from minutes to milliseconds
+        })
+        .catch(err => msg.channel.send("Could not find any user with ID " + userID));
 }
 
 module.exports = {
