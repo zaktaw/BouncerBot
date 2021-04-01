@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 const config = require('./config.json')
+const blacklist = require('./blacklist.json')
 const user = require('./user.js')
 const moderator = require('./moderator.js')
 
@@ -18,8 +19,10 @@ bot.on('message', (msg) => {
     // recieve messages from users
     if (msg.channel.type == "dm") {
 
-        // get blacklistedUsers array from json file
-        // if msg.author.id is in array: return (do not respond to blacklisted users)
+         // check if user is blacklisted
+         let blacklistJson = blacklist;
+         let blacklistedUsers = blacklistJson.blacklistedUsers;
+         if (blacklistedUsers.includes(msg.author.id)) return;
 
         if (msg.content.toLowerCase().startsWith("report")) {
            user.reportUser(msg, bot)
