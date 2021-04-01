@@ -23,13 +23,18 @@ async function timeoutUser(bot, msg) {
     guild.members.fetch(userID)
         .then(member => {
 
-            member.user.send(`You have been set on a timeout for ${time} minute${ time > 1 ? 's' : ''}: ${message}`)
+            let username = member.user.username;
+            let displayName = member.displayName;
+            displayName = displayName != username ? displayName : null // set displayName to null if it is identical to the username
+
+            msg.channel.send(`A timeout of ${time} minute${ time > 1 ? 's' : ''} was set for user ${username} ${displayName ? ' (' + displayName + ')' : ''}`);
+            member.user.send(`You have been set on a timeout for ${time} minute${ time > 1 ? 's' : ''}: ${message}. For the duration of the timeout you will not be able to connect to any voice channels or write in any text channels.`);
             member.voice.kick(); // remove user from the voice channel the user is connected to
-            member.roles.add(config.timeoutRoleID)
+            member.roles.add(config.timeoutRoleID);
             setTimeout(() => {
-                member.roles.remove(config.timeoutRoleID)
-                member.user.send("You are no longer on a timeout")
-            }, time * 60 * 1000) // convert time from minutes to milliseconds
+                member.roles.remove(config.timeoutRoleID);
+                member.user.send("You are no longer on a timeout. You will now be able to join voice channels and write in text channels.");
+            }, time * 60 * 1000); // convert time from minutes to milliseconds
         })
         .catch(err => msg.channel.send("Could not find any user with ID " + userID));
 }
