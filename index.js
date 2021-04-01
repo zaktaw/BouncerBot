@@ -24,14 +24,7 @@ bot.on('message', (msg) => {
          let blacklistedUsers = blacklistJson.blacklistedUsers;
          if (blacklistedUsers.includes(msg.author.id)) return;
 
-        if (msg.content.toLowerCase().startsWith("report")) {
-           user.reportUser(msg, bot)
-        }
-
-        else {
-            msg.reply("Not a valid message. Message needs to start with report")
-                .catch(err => console.error(err))
-        }
+        user.reportUser(msg, bot)
     }
 
     else {
