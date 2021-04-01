@@ -70,8 +70,39 @@ async function blacklistUser(bot, msg) {
         .catch(() => msg.channel.send("Could not find any user in the guild with ID " + userID));
 }
 
+async function unblacklistUser(bot, msg) {
+    let userID = msg.content.split(" ")[1]
+
+    let guild = await bot.guilds.cache.filter(guild => guild.id == config.guildID).get(config.guildID);
+    guild.members.fetch(userID)
+        .then(member => {
+
+            let username = member.user.username;
+            let displayName = member.displayName;
+            displayName = displayName != username ? displayName : null // set displayName to null if it is identical to the username
+
+            // get blacklistedUsers array from json file
+            let blacklistJson = blacklist;
+            let blacklistedUsers = blacklistJson.blacklistedUsers;
+
+            // check if user is blacklisted
+            if (!blacklistedUsers.includes(userID)) return msg.channel.send(`Could not find user ${username} ${displayName ? ' (' + displayName + ')' : ''} in the blacklist.`);
+            // remove user from blacklist
+            let index = blacklistedUsers.indexOf(userID);
+            blacklistedUsers.splice(index, 1);
+            msg.channel.send(`User ${username} ${displayName ? ' (' + displayName + ')' : ''} was successfully removed from the blacklist.`)
+
+            // update json file 
+            blacklistJson = JSON.stringify(blacklistJson);
+            fs.writeFileSync('./blacklist.json', blacklistJson);
+
+        })
+        .catch(() => msg.channel.send("Could not find any user in the guild with ID " + userID));
+}
+
 module.exports = {
     warnUser,
     timeoutUser,
-    blacklistUser
+    blacklistUser,
+    unblacklistUser
 }

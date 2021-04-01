@@ -68,6 +68,11 @@ bot.on('message', (msg) => {
                 moderator.blacklistUser(bot, msg)
                 break;
 
+            case 'unblacklist' :
+                if (!args[1]) return msg.channel.send("Unblacklist command needs a user ID as argument, $unblacklist <user ID>, i.e $unblacklist 696215209303474187");
+                moderator.unblacklistUser(bot, msg)
+                break;
+
             default :
                 msg.channel.send(`"${args[0]}" is an invalid command.`)
                     .then(message => message.delete( {timeout: 5000} ))
