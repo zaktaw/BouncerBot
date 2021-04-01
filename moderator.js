@@ -1,4 +1,6 @@
+const fs = require('fs')
 const config = require('./config.json')
+const blacklist = require('./blacklist.json')
 
 async function warnUser(bot, msg) {
 
@@ -9,7 +11,7 @@ async function warnUser(bot, msg) {
     let guild = await bot.guilds.cache.filter(guild => guild.id == config.guildID).get(config.guildID);
     guild.members.fetch(userID)
         .then(member => member.user.send(message))
-        .catch(err => msg.channel.send("Could not find any user with ID " + userID))
+        .catch(err => msg.channel.send("Could not find any user in the guild with ID " + userID))
 }
 
 // a timeout will set assign a timeout-role to the user, send the user a message that contains the reason for the timeout
@@ -36,16 +38,36 @@ async function timeoutUser(bot, msg) {
                 member.user.send("You are no longer on a timeout. You will now be able to join voice channels and write in text channels.");
             }, time * 60 * 1000); // convert time from minutes to milliseconds
         })
-        .catch(err => msg.channel.send("Could not find any user with ID " + userID));
+        .catch(err => msg.channel.send("Could not find any user in the guild with ID " + userID));
 }
 
-function blacklistUser(msg) {
+async function blacklistUser(bot, msg) {
     let userID = msg.content.split(" ")[1]
-    // get blacklistedUsers array from json file
-    // check if userID is in array
-        // send error message: user already blacklisted
-    // else: add user to array
-    // update json file 
+
+    let guild = await bot.guilds.cache.filter(guild => guild.id == config.guildID).get(config.guildID);
+    guild.members.fetch(userID)
+        .then(member => {
+
+            let username = member.user.username;
+            let displayName = member.displayName;
+            displayName = displayName != username ? displayName : null // set displayName to null if it is identical to the username
+
+            // get blacklistedUsers array from json file
+            let blacklistJson = blacklist;
+            let blacklistedUsers = blacklistJson.blacklistedUsers;
+
+            // check if user is blacklisted
+            if (blacklistedUsers.includes(userID)) return msg.channel.send(`User ${username} ${displayName ? ' (' + displayName + ')' : ''} has already been blacklisted.`);
+            // add user to blacklist
+            blacklistedUsers.push(userID);
+            msg.channel.send(`User ${username} ${displayName ? ' (' + displayName + ')' : ''} was successfully added to the blacklist.`)
+
+            // update json file 
+            blacklistJson = JSON.stringify(blacklistJson);
+            fs.writeFileSync('./blacklist.json', blacklistJson);
+
+        })
+        .catch(() => msg.channel.send("Could not find any user in the guild with ID " + userID));
 }
 
 module.exports = {

@@ -62,7 +62,8 @@ bot.on('message', (msg) => {
 
             case 'blacklist' :
                 if (!args[1]) return msg.channel.send("Blacklist command needs a user ID as argument, $blacklist <user ID>, i.e $blacklist 696215209303474187");
-                moderator.blacklistUser(msg)
+                moderator.blacklistUser(bot, msg)
+                break;
 
             default :
                 msg.channel.send(`"${args[0]}" is an invalid command.`)
