@@ -10,8 +10,16 @@ async function warnUser(bot, msg) {
     // send warning to user
     let guild = await bot.guilds.cache.filter(guild => guild.id == config.guildID).get(config.guildID);
     guild.members.fetch(userID)
-        .then(member => member.user.send(message))
-        .catch(err => msg.channel.send("Could not find any user in the guild with ID " + userID))
+        .then(member => {
+
+            let username = member.user.username;
+            let displayName = member.displayName;
+            displayName = displayName != username ? displayName : null // set displayName to null if it is identical to the username
+
+            msg.channel.send(`A warning has been sent to user ${username} ${displayName ? ' (' + displayName + ')' : ''}`);
+            member.user.send(message)
+        })
+        .catch(err => msg.channel.send("Could not find any user in the guild with ID " + userID));
 }
 
 // a timeout will set assign a timeout-role to the user, send the user a message that contains the reason for the timeout
@@ -30,13 +38,33 @@ async function timeoutUser(bot, msg) {
             displayName = displayName != username ? displayName : null // set displayName to null if it is identical to the username
 
             msg.channel.send(`A timeout of ${time} minute${ time > 1 ? 's' : ''} was set for user ${username} ${displayName ? ' (' + displayName + ')' : ''}`);
-            member.user.send(`You have been set on a timeout for ${time} minute${ time > 1 ? 's' : ''}: ${message}. For the duration of the timeout you will not be able to connect to any voice channels or write in any text channels.`);
+            member.user.send(`You have been set on a timeout for ${time} minute${ time > 1 ? 's' : ''}: ${message}. For the duration of the timeout you will not be able to connect to any voice channels or write in any text channels. If your timeout isn't removed after the set time, please notify a moderator.`);
             member.voice.kick(); // remove user from the voice channel the user is connected to
             member.roles.add(config.timeoutRoleID);
             setTimeout(() => {
                 member.roles.remove(config.timeoutRoleID);
                 member.user.send("You are no longer on a timeout. You will now be able to join voice channels and write in text channels.");
             }, time * 60 * 1000); // convert time from minutes to milliseconds
+        })
+        .catch(err => msg.channel.send("Could not find any user in the guild with ID " + userID));
+}
+
+// a timeout will set assign a timeout-role to the user, send the user a message that contains the reason for the timeout
+// the timeout-role will be unassigned after a given time
+async function untimeoutUser(bot, msg) {
+    let userID = msg.content.split(" ")[1];
+
+    let guild = await bot.guilds.cache.filter(guild => guild.id == config.guildID).get(config.guildID);
+    guild.members.fetch(userID)
+        .then(member => {
+
+            let username = member.user.username;
+            let displayName = member.displayName;
+            displayName = displayName != username ? displayName : null // set displayName to null if it is identical to the username
+
+            msg.channel.send(`Timeout for user ${username} ${displayName ? ' (' + displayName + ')' : ''} is now removed.`);
+            member.user.send("You are no longer on a timeout. You will now be able to join voice channels and write in text channels.");
+            member.roles.remove(config.timeoutRoleID);
         })
         .catch(err => msg.channel.send("Could not find any user in the guild with ID " + userID));
 }
@@ -104,5 +132,6 @@ module.exports = {
     warnUser,
     timeoutUser,
     blacklistUser,
-    unblacklistUser
+    unblacklistUser,
+    untimeoutUser
 }

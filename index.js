@@ -56,6 +56,11 @@ bot.on('message', (msg) => {
                 moderator.timeoutUser(bot, msg);
                 break;
 
+            case 'untimeout' :
+                if (!args[1]) return msg.channel.send("Untimeout command needs a user ID as an argument, $untimeout <user ID>, i.e $untimeout 696215209303474187");
+                moderator.untimeoutUser(bot, msg);
+                break;
+
             case 'blacklist' :
                 if (!args[1]) return msg.channel.send("Blacklist command needs a user ID as argument, $blacklist <user ID>, i.e $blacklist 696215209303474187");
                 moderator.blacklistUser(bot, msg)
