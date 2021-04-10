@@ -12,6 +12,9 @@ async function warnUser(bot, msg) {
     guild.members.fetch(userID)
         .then(member => {
 
+            if (member.roles.cache.has(config.moderatorRoleID)) return msg.channel.send("Warn command can't be used on another moderator")
+
+
             let username = member.user.username;
             let displayName = member.displayName;
             displayName = displayName != username ? displayName : null // set displayName to null if it is identical to the username
@@ -32,6 +35,8 @@ async function timeoutUser(bot, msg) {
     let guild = await bot.guilds.cache.filter(guild => guild.id == config.guildID).get(config.guildID);
     guild.members.fetch(userID)
         .then(member => {
+
+            if (member.roles.cache.has(config.moderatorRoleID)) return msg.channel.send("Timeout command can't be used on another moderator")
 
             let username = member.user.username;
             let displayName = member.displayName;
@@ -58,6 +63,8 @@ async function untimeoutUser(bot, msg) {
     guild.members.fetch(userID)
         .then(member => {
 
+            if (member.roles.cache.has(config.moderatorRoleID)) return msg.channel.send("Untimeout command can't be used on another moderator")
+
             let username = member.user.username;
             let displayName = member.displayName;
             displayName = displayName != username ? displayName : null // set displayName to null if it is identical to the username
@@ -75,6 +82,8 @@ async function blacklistUser(bot, msg) {
     let guild = await bot.guilds.cache.filter(guild => guild.id == config.guildID).get(config.guildID);
     guild.members.fetch(userID)
         .then(member => {
+
+            if (member.roles.cache.has(config.moderatorRoleID)) return msg.channel.send("Blacklist command can't be used on another moderator")
 
             let username = member.user.username;
             let displayName = member.displayName;
@@ -104,6 +113,8 @@ async function unblacklistUser(bot, msg) {
     let guild = await bot.guilds.cache.filter(guild => guild.id == config.guildID).get(config.guildID);
     guild.members.fetch(userID)
         .then(member => {
+
+            if (member.roles.cache.has(config.moderatorRoleID)) return msg.channel.send("Unblacklist command can't be used on another moderator")
 
             let username = member.user.username;
             let displayName = member.displayName;
